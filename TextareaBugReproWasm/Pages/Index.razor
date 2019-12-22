@@ -1,0 +1,33 @@
+﻿@page "/"
+
+<textarea @bind-value="Content" @bind-value:event="oninput" @onkeyup="@NoteTypingKeyUp" style="height: auto; min-height: 500px; width: 700px;"></textarea>
+
+@code {
+    public string Content { get; set; } = "";
+    private Timer timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        timer = new Timer(300);
+        timer.Elapsed += NoteStoppedTyping;
+        timer.AutoReset = false;
+    }
+
+    void NoteTypingKeyUp(KeyboardEventArgs e)
+    {
+        // remove previous one
+        timer.Stop();
+
+        // new timer
+        timer.Start();
+    }
+
+    private void NoteStoppedTyping(Object source, ElapsedEventArgs e)
+    {
+        Console.WriteLine("Stopped typing.");
+        //Simulate API call to update the note
+        Task.Delay(100);
+    }
+}
+
+
